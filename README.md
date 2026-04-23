@@ -4,7 +4,7 @@ Our analysis of nearly 100,000 orders confirms that delivery delays are directly
 
 # Project Links
 
-* **Link to Notebook:** [text](https://colab.research.google.com/drive/1l1J89750bLJ15O9ws_moYGJYAMTXe-LX?usp=sharing)
+* **Link to Notebook:** (https://colab.research.google.com/drive/1l1J89750bLJ15O9ws_moYGJYAMTXe-LX?usp=sharing)
 * **Link to Dashboard:**  
 * **Link to Presentation:** (https://docs.google.com/presentation/d/1YvFE2e0fsKKB1bF5hopiSmQ2cBFkJyOs/edit?usp=drive_link&ouid=106166006012251092933&rtpof=true&sd=true)
 
