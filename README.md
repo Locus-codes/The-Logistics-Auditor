@@ -1,3 +1,21 @@
+# Executive Summary
+
+Our analysis of nearly 100,000 orders confirms that delivery delays are directly damaging our customer ratings, especially in the Northeast. While our average late rate is 7.9%, states like Alagoas and Maranhão are seeing much higher delays, which is causing a significant drop in satisfaction. The data shows a clear slide from 4.25 stars for on-time deliveries down to just 1.86 stars for "super late" orders. To turn this around and stop the influx of negative reviews, we need to refine our logistics in these struggling regions and provide customers with more realistic delivery timelines.
+
+# Project Links
+
+* **Link to Notebook:** [text](https://colab.research.google.com/drive/1l1J89750bLJ15O9ws_moYGJYAMTXe-LX?usp=sharing)
+* **Link to Dashboard:**  
+* **Link to Presentation:** (https://docs.google.com/presentation/d/1YvFE2e0fsKKB1bF5hopiSmQ2cBFkJyOs/edit?usp=drive_link&ouid=106166006012251092933&rtpof=true&sd=true)
+
+
+# Technical Explanation
+
+## Data Cleaning
+Our data cleaning process ensured accurate analysis by addressing several key issues. We identified and resolved 551 duplicate reviews by calculating the average review score for orders with multiple reviews, consolidating 99,224 review records into 98,673 unique order reviews. We properly handled 1,234 canceled or unavailable orders by flagging them as "Not Delivered" rather than including them in delay calculations, which prevented these non-delivery cases from skewing our late delivery statistics. For the product category analysis, we successfully joined order data with product information for 96,778 orders (97% of total orders), with the remaining 3% lacking complete product details. Additionally, we converted all date fields to proper datetime formats to enable accurate day-difference calculations between estimated and actual delivery dates.
+
+
+
 # Project Brief: The "Last Mile" Logistics Auditor
 
 **Client:** Veridi Logistics (Global E-Commerce Aggregator)  
