@@ -1,7 +1,5 @@
 import streamlit as st
 import pandas as pd
-import plotly.express as px
-import plotly.graph_objects as go
 
 # Page config
 st.set_page_config(
@@ -11,7 +9,7 @@ st.set_page_config(
 )
 
 # Title
-st.title("The 'Last Mile' Logistics Auditor")
+st.title("📦 The 'Last Mile' Logistics Auditor")
 st.markdown("**Veridi Logistics - Delivery Performance Analysis**")
 
 # Sidebar
@@ -20,18 +18,18 @@ page = st.sidebar.selectbox("Choose Analysis",
     ["Executive Summary", "Delivery Performance", "Geographic Analysis", "Customer Sentiment"])
 
 if page == "Executive Summary":
-    st.header(" Executive Summary")
+    st.header("🎯 Executive Summary")
     
     col1, col2, col3, col4 = st.columns(4)
     
     with col1:
         st.metric("Total Orders", "99,441")
     with col2:
-        st.metric("Late Delivery Rate", "7.9%", delta="-2.1%")
+        st.metric("Late Delivery Rate", "7.9%")
     with col3:
-        st.metric("Worst State", "Alagoas (AL)", delta="23.1%")
+        st.metric("Worst State", "Alagoas (AL)")
     with col4:
-        st.metric("Review Impact", "2.39 stars", delta="-2.39")
+        st.metric("Review Impact", "2.39 stars")
     
     st.markdown("""
     ### Key Findings
@@ -45,46 +43,35 @@ if page == "Executive Summary":
     """)
 
 elif page == "Delivery Performance":
-    st.header("Delivery Performance Analysis")
+    st.header("⏰ Delivery Performance Analysis")
     
-    # Delivery status pie chart
-    delivery_counts = {
-        'On Time': 90381,
-        'Late': 3162, 
-        'Super Late': 4664,
-        'Not Delivered': 1234
+    # Delivery status data
+    delivery_data = {
+        'Status': ['On Time', 'Late', 'Super Late', 'Not Delivered'],
+        'Count': [90381, 3162, 4664, 1234],
+        'Percentage': [90.9, 3.2, 4.7, 1.2]
     }
     
-    fig_pie = px.pie(
-        values=list(delivery_counts.values()),
-        names=list(delivery_counts.keys()),
-        title="Delivery Status Distribution",
-        color_discrete_map={
-            'On Time': '#2E8B57',
-            'Late': '#FF8C00', 
-            'Super Late': '#DC143C',
-            'Not Delivered': '#696969'
-        }
-    )
-    st.plotly_chart(fig_pie, use_container_width=True)
+    df_delivery = pd.DataFrame(delivery_data)
+    
+    st.subheader("📊 Delivery Status Distribution")
+    st.dataframe(df_delivery, use_container_width=True)
+    
+    # Simple bar chart using Streamlit
+    st.bar_chart(df_delivery.set_index('Status')['Count'])
     
     # Review scores by delivery status
-    st.subheader("📊 Review Scores by Delivery Status")
+    st.subheader("⭐ Review Scores by Delivery Status")
     
     review_data = {
         'Delivery Status': ['On Time', 'Late', 'Super Late'],
-        'Average Review Score': [4.25, 3.60, 1.86]
+        'Average Review Score': [4.25, 3.60, 1.86],
+        'Order Count': [90381, 3162, 4664]
     }
     
-    fig_bar = px.bar(
-        x=review_data['Delivery Status'],
-        y=review_data['Average Review Score'],
-        title="Average Review Score by Delivery Status",
-        color=review_data['Average Review Score'],
-        color_continuous_scale=['red', 'orange', 'green']
-    )
-    fig_bar.update_layout(yaxis_range=[0, 5])
-    st.plotly_chart(fig_bar, use_container_width=True)
+    df_reviews = pd.DataFrame(review_data)
+    st.dataframe(df_reviews, use_container_width=True)
+    st.bar_chart(df_reviews.set_index('Delivery Status')['Average Review Score'])
 
 elif page == "Geographic Analysis":
     st.header("🗺️ Geographic Performance Analysis")
@@ -96,53 +83,43 @@ elif page == "Geographic Analysis":
         'Total Orders': [411, 736, 490, 1323, 345, 3344, 12698, 278, 2018, 969]
     }
     
-    fig_geo = px.bar(
-        x=worst_states['Late Percentage'],
-        y=worst_states['State'],
-        orientation='h',
-        title="Top 10 Worst Performing States (Late Delivery %)",
-        color=worst_states['Late Percentage'],
-        color_continuous_scale='Reds'
-    )
-    fig_geo.update_layout(yaxis={'categoryorder':'total ascending'})
-    st.plotly_chart(fig_geo, use_container_width=True)
-    
-    # State details table
-    st.subheader("📋 State Performance Details")
     df_states = pd.DataFrame(worst_states)
+    
+    st.subheader("📋 Top 10 Worst Performing States")
     st.dataframe(df_states, use_container_width=True)
+    
+    # Simple bar chart
+    st.bar_chart(df_states.set_index('State')['Late Percentage'])
+    
+    st.markdown("""
+    ### Key Insights:
+    - **Northeastern states dominate** the worst performers list
+    - **Alagoas (AL)** has 23.1% late delivery rate - nearly 1 in 4 orders!
+    - **Geographic pattern** suggests infrastructure challenges in remote areas
+    """)
 
 elif page == "Customer Sentiment":
     st.header("⭐ Customer Sentiment Analysis")
     
-    # Review score trend
+    # Review score data
     sentiment_data = {
         'Delivery Status': ['On Time', 'Late', 'Super Late'],
         'Average Stars': [4.25, 3.60, 1.86],
         'Order Count': [90381, 3162, 4664]
     }
     
-    fig_sentiment = go.Figure()
-    fig_sentiment.add_trace(go.Scatter(
-        x=sentiment_data['Delivery Status'],
-        y=sentiment_data['Average Stars'],
-        mode='lines+markers',
-        line=dict(color='red', width=4),
-        marker=dict(size=12)
-    ))
-    fig_sentiment.update_layout(
-        title="Customer Satisfaction Decline",
-        yaxis_title="Average Review Score (1-5 stars)",
-        yaxis_range=[0, 5]
-    )
-    st.plotly_chart(fig_sentiment, use_container_width=True)
+    df_sentiment = pd.DataFrame(sentiment_data)
+    
+    st.subheader("📊 Review Scores by Delivery Performance")
+    st.dataframe(df_sentiment, use_container_width=True)
+    st.line_chart(df_sentiment.set_index('Delivery Status')['Average Stars'])
     
     # Impact summary
     st.subheader("💡 Business Impact")
     col1, col2 = st.columns(2)
     
     with col1:
-        st.info("""
+        st.error("""
         **The Problem:**
         - 2.39-star difference between best and worst delivery performance
         - Super late orders get 1.86 stars (terrible reviews)
@@ -156,6 +133,15 @@ elif page == "Customer Sentiment":
         - Improve delivery time estimates
         - Invest in regional logistics infrastructure
         """)
+    
+    st.markdown("""
+    ### The Numbers Don't Lie:
+    - **On-time deliveries:** 4.25 stars ⭐⭐⭐⭐
+    - **Late deliveries:** 3.60 stars ⭐⭐⭐
+    - **Super late deliveries:** 1.86 stars ⭐
+    
+    **This 2.39-star drop proves that delivery delays are destroying customer satisfaction!**
+    """)
 
 # Footer
 st.markdown("---")
